@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">InspirationalCats</string>
+    <string name="welcome">Welcome to Inspirational Cats !</string>
+    <string name="top_ten_title">Random Cat TOP 10</string>
+    <string name="cat_mood_title">Your Cat Mood</string>
+    <string name="cat_meme_title">Your Cat Meme</string>
 </resources>
