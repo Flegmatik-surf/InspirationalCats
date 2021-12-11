@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,7 @@ public class CatMemem extends AppCompatActivity {
                 Log.i("Request", "GENERATE MEME Nya !");
 
                 String baseDataURL = "https://cataas.com/api/cats";
-                String baseImageURL = "https://cataas.com/cat/";
+                String baseImageURL = "https://cataas.com/cat";
                 String sentence = setenceMeme.getText().toString();
                 String color = colorTextMeme.getText().toString();
                 AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
@@ -77,6 +78,7 @@ public class CatMemem extends AppCompatActivity {
 
                 //On change l'affichage de l'image view
                 displayImageTask.execute(completeDisplayURL);
+                Toast.makeText(v.getContext(), "Meme generated !", Toast.LENGTH_SHORT).show();
 
             }
         });

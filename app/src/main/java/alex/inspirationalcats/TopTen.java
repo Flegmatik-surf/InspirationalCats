@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +47,7 @@ public class TopTen extends AppCompatActivity {
                 }
 
                 //On sélectionne aléatoirement 10 index distincts des éléments du JSON
-
+                //Integer[] selectedIndexs;
 
                 //On récupère les Id des images choisies pour faire la bonne requête
                 String[] urlIds = new String[10];
@@ -60,7 +61,8 @@ public class TopTen extends AppCompatActivity {
 
                 //On change l'affichage de la la liste view
                 //TODO changer l'image view en liste view, et add les 10 images à partir de leurs URLs
-                displayImageTask.execute("https://cataas.com/cat/" + urlIds[5]);
+                displayImageTask.execute("https://cataas.com/cat/" + urlIds[0]);
+                Toast.makeText(v.getContext(), "Randomized", Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,30 +39,33 @@ public class CatMood extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i("Request", "SEARCHHHHH");
 
-                String baseURL = "https://cataas.com/api/cats";
+                String baseDataURL = "https://cataas.com/api/cats";
+                String baseImageURL = "https://cataas.com/cat";
                 String tag1 = tagOneField.getText().toString();
                 String tag2 = tagTwoField.getText().toString();
                 AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
                 AsyncBitmapDownloader displayImageTask = new AsyncBitmapDownloader(displayMoodCatView);
 
-                //construction de l'URL en fonction des tags
-                String completeURL = baseURL;
+                String completeDataURL = baseDataURL;
+                String completeDisplayURL = baseImageURL;
+
+                //construction de l'URL de requête de données en fonction des tags
                 Log.i("Request", "Tag 1 : "+ tag1);
                 Log.i("Request", "Tag 2 : "+ tag2);
                 if (!tag1.equals("")){
-                    completeURL += "?tags=" + tag1.toLowerCase();
+                    completeDataURL += "?tags=" + tag1.toLowerCase();
                     if (!tag2.equals("")){
-                        completeURL += "," + tag2.toLowerCase();
+                        completeDataURL += "," + tag2.toLowerCase();
                     }
-                } else if (!tag1.equals("")){
-                    completeURL += "?tags=" + tag2.toLowerCase();
+                } else if (!tag2.equals("")){
+                    completeDataURL += "?tags=" + tag2.toLowerCase();
                 }
-                Log.i("Request", "URL de requête CAT MOOD : " + completeURL);
+                Log.i("Request", "URL de requête CAT MOOD : " + completeDataURL);
 
                 //On récupère le JSON du chat
                 JSONArray catJSONArray = null;
                 try {
-                    catJSONArray = getImageUrltask.execute(completeURL).get();
+                    catJSONArray = getImageUrltask.execute(completeDataURL).get();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -79,11 +83,14 @@ public class CatMood extends AppCompatActivity {
                     }
 
                     //On change l'affichage de l'image view
-                    displayImageTask.execute("https://cataas.com/cat/" + urlId);
+                    completeDisplayURL = baseImageURL + "/" + urlId;
+                    displayImageTask.execute(completeDisplayURL);
+                    Toast.makeText(v.getContext(), "Oh what a mood today", Toast.LENGTH_SHORT).show();
                 } else {
                     //si le tableau est vide, un ou plusieurs tags n'existent pas.
                     Drawable errorImage = getDrawable(R.drawable.cat404error);
                     displayMoodCatView.setImageDrawable(errorImage);
+                    Toast.makeText(v.getContext(), "Try again with other tags", Toast.LENGTH_SHORT).show();
                 }
             }
         });
