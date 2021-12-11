@@ -31,7 +31,7 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/catMoodDefaultImage"
+            android:id="@+id/catMoodImage"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:layout_marginTop="16dp"
@@ -51,12 +51,14 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tagOneField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Searching tag "
                 android:minHeight="48dp" />
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tagTwoField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Searching criteria 2"

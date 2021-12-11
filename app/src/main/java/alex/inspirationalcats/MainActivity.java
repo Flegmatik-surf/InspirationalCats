@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("MainActivity", "Let's go");
+                Log.i("Navigation", "Let's go");
                 Intent startTopTen = new Intent(getApplicationContext(), TopTen.class);
                 startActivity(startTopTen);
             }

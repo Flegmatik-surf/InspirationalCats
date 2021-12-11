@@ -7,6 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public class TopTen extends AppCompatActivity {
 
@@ -18,19 +25,50 @@ public class TopTen extends AppCompatActivity {
         Button randomizeButton = findViewById(R.id.topTenSearchButton);
         Button launchCatMoodButton = findViewById(R.id.catMoodFromTopTenButton);
         Button launchCatMemeButton = findViewById(R.id.catmemeFromTopTenButton);
+        ImageView displayCatView = findViewById(R.id.topTenDefaultImage);
 
         randomizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Top Ten", "RANDOOOOOOM");
-                //TODO
+                Log.i("Request", "RANDOOOOOOM");
+                String baseURL = "https://cataas.com/api/cats";
+                AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
+                AsyncBitmapDownloader displayImageTask = new AsyncBitmapDownloader(displayCatView);
+
+                //On récupère le JSON de la base de données complète
+                JSONArray catJSONArray = null;
+                try {
+                    catJSONArray = getImageUrltask.execute(baseURL).get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                //On sélectionne aléatoirement 10 index distincts des éléments du JSON
+
+
+                //On récupère les Id des images choisies pour faire la bonne requête
+                String[] urlIds = new String[10];
+                try {
+                    for(int i=0; i<10; i++){
+                        urlIds[i] = catJSONArray.getJSONObject(i).getString("id");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //On change l'affichage de la la liste view
+                //TODO changer l'image view en liste view, et add les 10 images à partir de leurs URLs
+                displayImageTask.execute("https://cataas.com/cat/" + urlIds[5]);
+
             }
         });
 
         launchCatMoodButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Top Ten","Top Ten --> Cat Mood");
+                Log.i("Navigation","Top Ten --> Cat Mood");
                 Intent goToCatMoodActivity = new Intent(getApplicationContext(), CatMood.class);
                 startActivity(goToCatMoodActivity);
             }
@@ -39,7 +77,7 @@ public class TopTen extends AppCompatActivity {
         launchCatMemeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Top Ten", "Top Ten --> Cat Meme");
+                Log.i("Navigation", "Top Ten --> Cat Meme");
                 Intent goToCatMemeActivity = new Intent(getApplicationContext(), CatMemem.class);
                 startActivity(goToCatMemeActivity);
             }
