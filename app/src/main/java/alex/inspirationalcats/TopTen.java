@@ -3,11 +3,14 @@ package alex.inspirationalcats;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -26,20 +29,26 @@ public class TopTen extends AppCompatActivity {
         Button randomizeButton = findViewById(R.id.topTenSearchButton);
         Button launchCatMoodButton = findViewById(R.id.catMoodFromTopTenButton);
         Button launchCatMemeButton = findViewById(R.id.catmemeFromTopTenButton);
-        ImageView displayCatView = findViewById(R.id.topTenDefaultImage);
+        //ImageView displayCatView = findViewById(R.id.topTenDefaultImage);
+
+
+        ListView displayTopTenCatView = findViewById(R.id.displayTopTen);
+        BitmapListAdapter adapter = new BitmapListAdapter();
 
         randomizeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Request", "RANDOOOOOOM");
-                String baseURL = "https://cataas.com/api/cats";
+                String baseDataURL = "https://cataas.com/api/cats";
+                String baseImageURL = "https://cataas.com/cat/";
                 AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
-                AsyncBitmapDownloader displayImageTask = new AsyncBitmapDownloader(displayCatView);
+                AsyncBitmapDownloaderList displayImageListTask = new AsyncBitmapDownloaderList(adapter);
+                //AsyncBitmapDownloader displayImageTask = new AsyncBitmapDownloader(displayCatView);
 
                 //On récupère le JSON de la base de données complète
                 JSONArray catJSONArray = null;
                 try {
-                    catJSONArray = getImageUrltask.execute(baseURL).get();
+                    catJSONArray = getImageUrltask.execute(baseDataURL).get();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -48,21 +57,27 @@ public class TopTen extends AppCompatActivity {
 
                 //On sélectionne aléatoirement 10 index distincts des éléments du JSON
                 //Integer[] selectedIndexs;
+                int nb_element = 10;
+                Integer[] indexs = DistinctRandom.distinctRandom(0, catJSONArray.length(), nb_element);
 
-                //On récupère les Id des images choisies pour faire la bonne requête
-                String[] urlIds = new String[10];
+                //On récupère les Id des images choisies pour faire compléter les bonnes requête
+                String[] completeDisplaysURLs = new String[nb_element];
                 try {
-                    for(int i=0; i<10; i++){
-                        urlIds[i] = catJSONArray.getJSONObject(i).getString("id");
+                    for(int i=0; i<nb_element; i++){
+                        completeDisplaysURLs[i] = baseImageURL + catJSONArray.getJSONObject(indexs[i]).getString("id");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
+
                 //On change l'affichage de la la liste view
                 //TODO changer l'image view en liste view, et add les 10 images à partir de leurs URLs
-                displayImageTask.execute("https://cataas.com/cat/" + urlIds[0]);
-                Toast.makeText(v.getContext(), "Randomized", Toast.LENGTH_SHORT).show();
+                //displayImageTask.execute(completeDisplaysURLs[0]);
+                adapter.clear();
+                displayImageListTask.execute(completeDisplaysURLs);
+                displayTopTenCatView.setAdapter(adapter);
+                Toast.makeText(v.getContext(), "Randomizing...", Toast.LENGTH_SHORT).show();
 
             }
         });

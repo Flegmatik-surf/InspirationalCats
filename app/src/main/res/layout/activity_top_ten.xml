@@ -30,15 +30,10 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/topTenDefaultImage"
+        <ListView
+            android:id="@+id/displayTopTen"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:scrollbars="vertical"
-            app:srcCompat="@drawable/questioncat2" />
+            android:layout_height="300dp" />
 
         <LinearLayout
             android:id="@+id/verticalTopTenLinearLayout"
