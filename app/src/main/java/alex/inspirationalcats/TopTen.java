@@ -29,7 +29,6 @@ public class TopTen extends AppCompatActivity {
         Button randomizeButton = findViewById(R.id.topTenSearchButton);
         Button launchCatMoodButton = findViewById(R.id.catMoodFromTopTenButton);
         Button launchCatMemeButton = findViewById(R.id.catmemeFromTopTenButton);
-        //ImageView displayCatView = findViewById(R.id.topTenDefaultImage);
 
 
         ListView displayTopTenCatView = findViewById(R.id.displayTopTen);
@@ -43,7 +42,6 @@ public class TopTen extends AppCompatActivity {
                 String baseImageURL = "https://cataas.com/cat/";
                 AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
                 AsyncBitmapDownloaderList displayImageListTask = new AsyncBitmapDownloaderList(adapter);
-                //AsyncBitmapDownloader displayImageTask = new AsyncBitmapDownloader(displayCatView);
 
                 //On récupère le JSON de la base de données complète
                 JSONArray catJSONArray = null;
@@ -72,8 +70,6 @@ public class TopTen extends AppCompatActivity {
 
 
                 //On change l'affichage de la la liste view
-                //TODO changer l'image view en liste view, et add les 10 images à partir de leurs URLs
-                //displayImageTask.execute(completeDisplaysURLs[0]);
                 adapter.clear();
                 displayImageListTask.execute(completeDisplaysURLs);
                 displayTopTenCatView.setAdapter(adapter);

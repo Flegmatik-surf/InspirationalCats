@@ -25,6 +25,10 @@ public class CatMemem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat_memem);
 
+        CatMemeDataBase catMemeDataBase = new CatMemeDataBase(this);
+        String baseDataURL = "https://cataas.com/api/cats";
+        String baseImageURL = "https://cataas.com/cat";
+
         Button generateMemeButton = findViewById(R.id.catMemeSearchButton);
         Button launchTopTenButton = findViewById(R.id.topTenFromMemeButton);
         Button launchCatMoodButton = findViewById(R.id.catMoodFromMemedButton);
@@ -32,13 +36,33 @@ public class CatMemem extends AppCompatActivity {
         EditText setenceMeme = findViewById(R.id.sentenceMeme);
         EditText colorTextMeme = findViewById(R.id.colorTextMeme);
 
+        //On load le dernier meme chargé si c'est pas la première fois.
+        //PS: on reconstruit l'URL au cas où le nom de domaine de l'API change. La requête restera valide.
+        String[] previousMeme = catMemeDataBase.lastMemeRequest();
+        if (previousMeme[0]!=null && !previousMeme[0].equals("")){
+
+            AsyncBitmapDownloader displayPreviousMeme = new AsyncBitmapDownloader(displayMemeCatView);
+            String previousUrl = baseImageURL + "/" + previousMeme[0]; //on rajoute l'id
+
+            if(!previousMeme[1].equals("")){
+                previousUrl += "/says/" + previousMeme[1].replace(" ", "%20");
+                setenceMeme.setText(previousMeme[1]);
+
+                if(!previousMeme[2].equals("")){
+                    previousUrl += "?color=" + previousMeme[2].toLowerCase();
+                    colorTextMeme.setText(previousMeme[2]);
+                }
+            }
+
+            displayPreviousMeme.execute(previousUrl);
+        }
+
+
         generateMemeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Request", "GENERATE MEME Nya !");
 
-                String baseDataURL = "https://cataas.com/api/cats";
-                String baseImageURL = "https://cataas.com/cat";
                 String sentence = setenceMeme.getText().toString();
                 String color = colorTextMeme.getText().toString();
                 AsyncCatsJSONData getImageUrltask = new AsyncCatsJSONData();
@@ -80,6 +104,8 @@ public class CatMemem extends AppCompatActivity {
                 displayImageTask.execute(completeDisplayURL);
                 Toast.makeText(v.getContext(), "Meme generated !", Toast.LENGTH_SHORT).show();
 
+                //Enfin on ajoute à la base de donnée la dernière requête pour l'afficher si on change d'activité
+                catMemeDataBase.insertData(urlId, sentence, color);
             }
         });
 
