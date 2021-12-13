@@ -1,5 +1,7 @@
 package alex.inspirationalcats;
 
+import static java.lang.Math.min;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -87,6 +89,27 @@ public class CatMemeDataBase extends SQLiteOpenHelper {
             result[2] = cursor.getString(cursor.getColumnIndex(COL3));
         }
         Log.i("Database", "Last request :" + result[0] + " " + result[1] + " " + result[2] + " from " + DATABASE_TABLE_NAME);
+        return result;
+
+    }
+
+    @SuppressLint("Range")
+    public String[][] lastMemeRequests(int number){
+        String select = new String("SELECT * from " + DATABASE_TABLE_NAME + " ORDER BY " + PKEY + " DESC");
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(select, null);
+
+        String[][] result = new String[number][3];
+        int n = min(cursor.getCount(), 10);
+        if (cursor.getCount() >0) {
+            cursor.moveToFirst();
+            for(int i = 0; i<n; i++) {
+                result[i][0] = cursor.getString(cursor.getColumnIndex(COL1));
+                result[i][1] = cursor.getString(cursor.getColumnIndex(COL2));
+                result[i][2] = cursor.getString(cursor.getColumnIndex(COL3));
+                cursor.moveToNext();
+            }
+        }
         return result;
 
     }

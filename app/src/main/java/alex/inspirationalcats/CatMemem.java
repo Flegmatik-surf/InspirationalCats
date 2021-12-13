@@ -32,6 +32,7 @@ public class CatMemem extends AppCompatActivity {
         Button generateMemeButton = findViewById(R.id.catMemeSearchButton);
         Button launchTopTenButton = findViewById(R.id.topTenFromMemeButton);
         Button launchCatMoodButton = findViewById(R.id.catMoodFromMemedButton);
+        Button lauchOldMemeButton = findViewById(R.id.goToOldMemes);
         ImageView displayMemeCatView = findViewById(R.id.catMemeImage);
         EditText setenceMeme = findViewById(R.id.sentenceMeme);
         EditText colorTextMeme = findViewById(R.id.colorTextMeme);
@@ -124,6 +125,15 @@ public class CatMemem extends AppCompatActivity {
                 Log.i("Navigation", "Cat Meme --> Cat Mood");
                 Intent goToCatMoodActivity = new Intent(getApplicationContext(), CatMood.class);
                 startActivity(goToCatMoodActivity);
+            }
+        });
+
+        lauchOldMemeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Navigation", "Cat Meme --> Old Memes");
+                Intent goToOldMemesActivity = new Intent(getApplicationContext(), OldMemes.class);
+                startActivity(goToOldMemesActivity);
             }
         });
     }

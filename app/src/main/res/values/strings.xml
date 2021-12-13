@@ -4,4 +4,5 @@
     <string name="top_ten_title">Random Cat TOP 10</string>
     <string name="cat_mood_title">Your Cat Mood</string>
     <string name="cat_meme_title">Your Cat Meme</string>
+    <string name="old_memes_title">Old Memes</string>
 </resources>
