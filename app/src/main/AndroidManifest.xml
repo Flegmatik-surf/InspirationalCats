@@ -13,7 +13,8 @@
         android:theme="@style/Theme.InspirationalCats">
         <activity
             android:name=".OldMemes"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".CatMemem"
             android:exported="false"
